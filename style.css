@@ -868,22 +868,24 @@ button {
   
   /* Ensure Modals don't overflow */
   .modal {
-    width: calc(100% - 32px);
-    max-width: 450px;
-    padding: 24px 20px;
+    width: calc(100% - 32px) !important;
+    max-width: 450px !important;
+    padding: 24px 20px !important;
   }
   
   .about-modal {
-    padding: 24px 20px;
+    width: 100% !important;
+    max-width: 450px !important;
+    padding: 24px 20px !important;
   }
   
   .shortcuts-grid {
-    grid-template-columns: 1fr; /* Stack shortcuts list */
-    gap: 8px;
+    grid-template-columns: 1fr !important; /* Stack shortcuts list */
+    gap: 8px !important;
   }
   
   .about-actions {
-    flex-direction: column;
-    gap: 8px;
+    flex-direction: column !important;
+    gap: 8px !important;
   }
 }
