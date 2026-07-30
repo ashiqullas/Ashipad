@@ -274,7 +274,17 @@ function renderSidebar() {
 
     li.querySelector('.doc-delete').onclick = (e) => {
       e.stopPropagation();
-      if (confirm(`Are you sure you want to delete "${doc.title || 'Untitled Document'}"?`)) {
+      
+      const modal = $('#deleteModal');
+      $('#deleteModalTitle').textContent = `"${doc.title || 'Untitled Document'}"`;
+      modal.classList.remove('hidden');
+      
+      $('#deleteCancel').onclick = () => {
+        modal.classList.add('hidden');
+      };
+      
+      $('#deleteConfirmBtn').onclick = () => {
+        modal.classList.add('hidden');
         docs = docs.filter(d => d.id !== doc.id);
         if (docs.length === 0) {
           createNewDoc();
@@ -286,7 +296,7 @@ function renderSidebar() {
             renderSidebar();
           }
         }
-      }
+      };
     };
     
     list.appendChild(li);
