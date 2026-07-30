@@ -7,5 +7,10 @@ node_modules/
 /playwright/.auth/
 
 # Extension Build Artifacts
+# Extension Build Artifacts
 extension-build/
 assets/ashipad-extension.zip
+extension-src/
+build-extension.sh
+inject-base64.js
+assets/ext-base64.txt
