@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AshiPad — Premium Rich Text Editor</title>
-  <meta name="description" content="AshiPad is a premium, lightweight rich-text editor with minimal RTF output. Draft visually or edit the source directly.">
-  <meta name="theme-color" content="#3b82f6">
+  <title>AshiPad</title>
+  <meta name="description" content="A fast, native-feeling rich text editor.">
+  <meta name="theme-color" content="#2563eb">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icon.svg">
@@ -32,7 +32,9 @@
         <button class="icon-btn" id="menuToggle" title="Menu" style="margin-right: 8px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
-        <span class="brand-mark">A</span>
+        <span class="brand-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+        </span>
         <span>AshiPad</span>
       </div>
       <div class="actions">
@@ -81,7 +83,7 @@
     <!-- Status Bar -->
     <footer class="status">
       <span id="status">Ready</span>
-      <span>RTF-Compatible Rich Text Editor</span>
+      <span>RTF Editor</span>
       <span id="charCount">0 characters</span>
     </footer>
   </div>
@@ -90,9 +92,11 @@
   <div class="backdrop hidden" id="about">
     <section class="modal about-modal">
       <button class="close about-close" id="aboutClose">×</button>
-      <div class="modal-mark">A</div>
+      <div class="modal-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+      </div>
       <h2>AshiPad</h2>
-      <p class="about-desc">A premium, lightweight rich-text editor built for focus and speed. Generates minimal, raw RTF output and saves your work locally.</p>
+      <p class="about-desc">A fast, lightweight rich-text editor that generates clean RTF output.</p>
       
       <div class="shortcuts-box">
         <h3>Keyboard Shortcuts</h3>
@@ -130,9 +134,11 @@
   <!-- Welcome Modal -->
   <div class="backdrop hidden" id="welcome">
     <section class="modal">
-      <div class="modal-mark">A</div>
+      <div class="modal-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+      </div>
       <h2>Welcome to AshiPad</h2>
-      <p>Write beautifully. Bold, italic, underline, strikethrough — all the essentials, nothing more.</p>
+      <p>A fast, functional text editor. Type your notes, format them, and copy the raw RTF code for use anywhere.</p>
       
       <label class="check">
         <input type="checkbox" id="hideWelcome"> Don't show this again

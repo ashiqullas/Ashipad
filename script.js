@@ -68,7 +68,7 @@ function toRtf(n) {
 
 const serialize = () => {
   const body = [...editor.childNodes].map(toRtf).join('');
-  return `{\\rtf1\\ansi\\ansicpg1252\\deff0 \n${body.trim()}\n}`;
+  return body.trim();
 };
 
 function fromRtf(r) {
@@ -358,7 +358,7 @@ function startTour() {
       { element: '.ribbon', popover: { title: 'Format text', description: 'Use the ribbon to bold, italicize, underline, or strike-through text. Standard keyboard shortcuts also work.', side: "bottom", align: 'start' }},
       { element: '.tabs', popover: { title: 'Switch views', description: 'Toggle between the visual editor and the raw RTF source code.', side: "bottom", align: 'start' }},
       { element: '#menuToggle', popover: { title: 'Manage documents', description: 'Access your saved documents or create new ones from the sidebar.', side: "bottom", align: 'start' }},
-      { element: '#themeToggle', popover: { title: 'Themes', description: 'Toggle between the beautifully crafted light and dark modes.', side: "bottom", align: 'start' }}
+      { element: '#themeToggle', popover: { title: 'Themes', description: 'Toggle between light and dark mode.', side: "bottom", align: 'start' }}
     ]
   });
   driverObj.drive();
