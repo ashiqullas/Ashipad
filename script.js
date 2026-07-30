@@ -11,9 +11,13 @@ const charCount = $('#charCount') || document.createElement('div');
 let activeView = 'write';
 let dirty = false;
 let saveTimer;
+let docs = [];
+let currentDocId = null;
 
 // Core Configuration
-const STORAGE_KEY = 'ashipad-content';
+const STORAGE_KEY = 'ashipad-docs';
+const CURRENT_DOC_KEY = 'ashipad-current-doc';
+const LEGACY_KEY = 'ashipad-content';
 
 // RTF Escaping and Parsing (basic implementation)
 const esc = s => s.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}').replace(/[\r\n]+\s*/g, '');
@@ -85,23 +89,37 @@ function updateCounts() {
 }
 
 function saveLocal() {
-  localStorage.setItem(STORAGE_KEY, editor.innerHTML);
-  dirty = false;
-  status.textContent = 'Ready';
-  saveState.textContent = 'All changes saved locally';
-  status.style.color = '';
-  saveState.style.color = '';
+  if (!currentDocId) return;
+  const doc = docs.find(d => d.id === currentDocId);
+  if (doc) {
+    doc.content = editor.innerHTML;
+    doc.title = $('#docTitle').value;
+    doc.updatedAt = Date.now();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(docs));
+    saveState.textContent = 'All changes saved';
+    saveState.style.opacity = '1';
+    dirty = false;
+    
+    // Update the sidebar item in-place without redrawing the whole list
+    const activeLi = $(`#doc-${currentDocId}`);
+    if (activeLi) {
+      const titleEl = activeLi.querySelector('.doc-title');
+      const dateEl = activeLi.querySelector('.doc-date');
+      if (titleEl) titleEl.textContent = doc.title || 'Untitled Document';
+      if (dateEl) dateEl.textContent = new Date(doc.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+  }
 }
 
-function markChanged(msg = 'Editing…') {
+function markChanged(msg = 'Saving…') {
   dirty = true;
-  status.textContent = saveState.textContent = msg;
-  status.style.color = 'var(--accent)';
-  saveState.style.color = 'var(--accent)';
-  
+  saveState.textContent = msg;
+  saveState.style.opacity = '0.7';
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveLocal, 1000);
+  saveTimer = setTimeout(saveLocal, 1500);
 }
+
+$('#docTitle').addEventListener('input', () => markChanged());
 
 function executeCommand(cmd, arg = null) {
   editor.focus();
@@ -184,16 +202,96 @@ source.oninput = () => {
   markChanged('Editing RTF…');
 };
 
-$('#newBtn').onclick = () => {
-  if (dirty && !confirm('Start a new document? Unsaved changes will be lost.')) return;
-  editor.innerHTML = '<p><br></p>';
-  source.value = '';
+// Sidebar Toggle Logic
+$('#menuToggle').onclick = () => $('#sidebar').classList.remove('sidebar-closed');
+$('#sidebarClose').onclick = () => $('#sidebar').classList.add('sidebar-closed');
+
+function createNewDoc() {
+  if (dirty) saveLocal();
+  const newDoc = {
+    id: Date.now().toString(),
+    title: 'Untitled Document',
+    content: '<p><br></p>',
+    updatedAt: Date.now()
+  };
+  docs.unshift(newDoc);
+  switchDoc(newDoc.id);
+  $('#sidebar').classList.add('sidebar-closed');
+}
+
+$('#newBtn').onclick = createNewDoc;
+$('#sidebarNewBtn').onclick = createNewDoc;
+
+function switchDoc(id) {
+  if (dirty) saveLocal();
+  currentDocId = id;
+  localStorage.setItem(CURRENT_DOC_KEY, id);
+  const doc = docs.find(d => d.id === id);
+  if (!doc) return;
+  
+  editor.innerHTML = doc.content;
+  $('#docTitle').value = doc.title;
+  
   updateCounts();
   checkEmpty();
+  source.value = serialize();
+  
+  renderSidebar();
   toggleView('write');
-  saveLocal();
-  status.textContent = 'New document';
-};
+}
+
+function renderSidebar() {
+  const list = $('#docList');
+  list.innerHTML = '';
+  docs.sort((a, b) => b.updatedAt - a.updatedAt);
+  
+  docs.forEach(doc => {
+    const li = document.createElement('li');
+    li.id = `doc-${doc.id}`;
+    if (doc.id === currentDocId) li.classList.add('active');
+    
+    const date = new Date(doc.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    
+    li.innerHTML = `
+      <div class="doc-info">
+        <div class="doc-title">${doc.title || 'Untitled Document'}</div>
+        <div class="doc-date">${date}</div>
+      </div>
+      <button class="icon-btn doc-delete" title="Delete document">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+      </button>
+    `;
+    
+    li.onclick = () => {
+      switchDoc(doc.id);
+      if (window.innerWidth <= 768) {
+        $('#sidebar').classList.add('sidebar-closed');
+      }
+    };
+
+    li.querySelector('.doc-delete').onclick = (e) => {
+      e.stopPropagation();
+      if (confirm(`Are you sure you want to delete "${doc.title || 'Untitled Document'}"?`)) {
+        docs = docs.filter(d => d.id !== doc.id);
+        if (docs.length === 0) {
+          createNewDoc();
+        } else {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(docs));
+          if (currentDocId === doc.id) {
+            switchDoc(docs[0].id);
+          } else {
+            renderSidebar();
+          }
+        }
+      }
+    };
+    
+    list.appendChild(li);
+  });
+}
 
 $('#copyRtfBtn').onclick = () => {
   navigator.clipboard.writeText(source.value).then(() => {
@@ -242,15 +340,37 @@ function init() {
     welcome.classList.remove('hidden');
   }
   
-  // Load Content
-  const savedContent = localStorage.getItem(STORAGE_KEY);
-  if (savedContent) {
-    editor.innerHTML = savedContent;
+  // Load Documents
+  try {
+    const savedDocs = localStorage.getItem(STORAGE_KEY);
+    if (savedDocs) docs = JSON.parse(savedDocs);
+  } catch(e) {}
+  
+  // Legacy migration
+  const legacyContent = localStorage.getItem(LEGACY_KEY);
+  if (legacyContent) {
+    docs.unshift({
+      id: Date.now().toString(),
+      title: 'Migrated Document',
+      content: legacyContent,
+      updatedAt: Date.now()
+    });
+    localStorage.removeItem(LEGACY_KEY);
   }
   
-  updateCounts();
-  checkEmpty();
-  source.value = serialize();
+  if (docs.length === 0) {
+    docs.push({
+      id: Date.now().toString(),
+      title: 'Untitled Document',
+      content: '<p><br></p>',
+      updatedAt: Date.now()
+    });
+  }
+  
+  const savedCurrentId = localStorage.getItem(CURRENT_DOC_KEY);
+  const targetId = docs.find(d => d.id === savedCurrentId) ? savedCurrentId : docs[0].id;
+  
+  switchDoc(targetId);
 }
 init();
 
