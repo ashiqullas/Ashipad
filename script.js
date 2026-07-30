@@ -37,8 +37,19 @@ function toRtf(n) {
   if (n.nodeType !== Node.ELEMENT_NODE) return '';
   
   const t = n.tagName.toLowerCase();
-  if (['div', 'p', 'li'].includes(t) && !n.textContent.trim()) return '\\par ';
-  if (t === 'br') return '\\par ';
+  const blocks = ['div', 'p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+  
+  let prefix = '';
+  if (blocks.includes(t)) {
+    let prev = n.previousSibling;
+    let prevIsBlock = prev && prev.nodeType === Node.ELEMENT_NODE && blocks.includes(prev.tagName.toLowerCase());
+    if (prev && !prevIsBlock) {
+      prefix = '\\par\n';
+    }
+  }
+
+  if (blocks.includes(t) && !n.textContent.trim()) return prefix + '\\par\n';
+  if (t === 'br') return '\\par\n';
   
   let x = [...n.childNodes].map(toRtf).join('');
   let { a, z } = getStyles(n);
@@ -48,7 +59,11 @@ function toRtf(n) {
   if (t === 'u' && !a.includes('\\ul ')) { a += '\\ul '; z = '\\ul0 ' + z; }
   if (['s', 'strike', 'del'].includes(t) && !a.includes('\\strike ')) { a += '\\strike '; z = '\\strike0 ' + z; }
 
-  return a + x + z + (['div', 'p', 'li'].includes(t) ? '\\par ' : '');
+  let out = prefix + a + x + z;
+  if (blocks.includes(t) && !out.endsWith('\\par\n') && !out.endsWith('\\par ')) {
+    out += '\\par\n';
+  }
+  return out;
 }
 
 const serialize = () => {
@@ -59,24 +74,24 @@ const serialize = () => {
 function fromRtf(r) {
   // Strips basic envelope
   let x = r.replace(/^{\\rtf1\s*/, '').replace(/}$/, '');
-  
+
   x = x.replace(/\\'([0-9a-fA-F]{2})/g, (m, p1) => String.fromCharCode(parseInt(p1, 16)))
-       .replace(/(?<!\\)\\par[d]?(?![a-zA-Z0-9])\s?/g, '\n')
-       .replace(/(?<!\\)\\line(?![a-zA-Z0-9])\s?/g, '\n')
-       .replace(/(?<!\\)\\b0(?![a-zA-Z0-9])\s?/g, '</strong>')
-       .replace(/(?<!\\)\\b(?![a-zA-Z0-9])\s?/g, '<strong>')
-       .replace(/(?<!\\)\\i0(?![a-zA-Z0-9])\s?/g, '</em>')
-       .replace(/(?<!\\)\\i(?![a-zA-Z0-9])\s?/g, '<em>')
-       .replace(/(?<!\\)\\ul0(?![a-zA-Z0-9])\s?/g, '</u>')
-       .replace(/(?<!\\)\\ul(?![a-zA-Z0-9])\s?/g, '<u>')
-       .replace(/(?<!\\)\\strike0(?![a-zA-Z0-9])\s?/g, '</s>')
-       .replace(/(?<!\\)\\strike(?![a-zA-Z0-9])\s?/g, '<s>')
-       .replace(/(?<!\\)\\[a-zA-Z]+-?\d*\s?/g, '') // Strip remaining unhandled control words
-       // unescape RTF special characters
-       .replace(/\\\{/g, '{')
-       .replace(/\\\}/g, '}')
-       .replace(/\\\\/g, '\\')
-       .replace(/[{}]/g, ''); // Strip group braces not escaped
+    .replace(/(?<!\\)\\par[d]?(?![a-zA-Z0-9])\s?/g, '\n')
+    .replace(/(?<!\\)\\line(?![a-zA-Z0-9])\s?/g, '\n')
+    .replace(/(?<!\\)\\b0(?![a-zA-Z0-9])\s?/g, '</strong>')
+    .replace(/(?<!\\)\\b(?![a-zA-Z0-9])\s?/g, '<strong>')
+    .replace(/(?<!\\)\\i0(?![a-zA-Z0-9])\s?/g, '</em>')
+    .replace(/(?<!\\)\\i(?![a-zA-Z0-9])\s?/g, '<em>')
+    .replace(/(?<!\\)\\ul0(?![a-zA-Z0-9])\s?/g, '</u>')
+    .replace(/(?<!\\)\\ul(?![a-zA-Z0-9])\s?/g, '<u>')
+    .replace(/(?<!\\)\\strike0(?![a-zA-Z0-9])\s?/g, '</s>')
+    .replace(/(?<!\\)\\strike(?![a-zA-Z0-9])\s?/g, '<s>')
+    .replace(/(?<!\\)\\[a-zA-Z]+-?\d*\s?/g, '') // Strip remaining unhandled control words
+    // unescape RTF special characters
+    .replace(/\\\{/g, '{')
+    .replace(/\\\}/g, '}')
+    .replace(/\\\\/g, '\\')
+    .replace(/[{}]/g, ''); // Strip group braces not escaped
 
   return x.split('\n').map(l => l.trim() ? `<p>${l}</p>` : '<p><br></p>').join('') || '<p><br></p>';
 }
@@ -99,7 +114,7 @@ function saveLocal() {
     saveState.textContent = 'All changes saved';
     saveState.style.opacity = '1';
     dirty = false;
-    
+
     // Update the sidebar item in-place without redrawing the whole list
     const activeLi = $(`#doc-${currentDocId}`);
     if (activeLi) {
@@ -132,7 +147,7 @@ function executeCommand(cmd, arg = null) {
 function toggleView(v) {
   activeView = v;
   $$('.tab').forEach(b => b.classList.toggle('active', b.dataset.view === v));
-  
+
   if (v === 'write') {
     editor.classList.remove('hidden');
     source.classList.add('hidden');
@@ -150,7 +165,7 @@ function toggleView(v) {
     source.offsetHeight; // reflow
     source.style.animation = null;
   }
-  
+
   if (v === 'rtf') source.value = serialize();
 }
 
@@ -228,14 +243,14 @@ function switchDoc(id) {
   localStorage.setItem(CURRENT_DOC_KEY, id);
   const doc = docs.find(d => d.id === id);
   if (!doc) return;
-  
+
   editor.innerHTML = doc.content;
   $('#docTitle').value = doc.title;
-  
+
   updateCounts();
   checkEmpty();
   source.value = serialize();
-  
+
   renderSidebar();
   toggleView('write');
 }
@@ -244,14 +259,14 @@ function renderSidebar() {
   const list = $('#docList');
   list.innerHTML = '';
   docs.sort((a, b) => b.updatedAt - a.updatedAt);
-  
+
   docs.forEach(doc => {
     const li = document.createElement('li');
     li.id = `doc-${doc.id}`;
     if (doc.id === currentDocId) li.classList.add('active');
-    
+
     const date = new Date(doc.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    
+
     li.innerHTML = `
       <div class="doc-info">
         <div class="doc-title">${doc.title || 'Untitled Document'}</div>
@@ -264,7 +279,7 @@ function renderSidebar() {
         </svg>
       </button>
     `;
-    
+
     li.onclick = () => {
       switchDoc(doc.id);
       if (window.innerWidth <= 768) {
@@ -274,15 +289,15 @@ function renderSidebar() {
 
     li.querySelector('.doc-delete').onclick = (e) => {
       e.stopPropagation();
-      
+
       const modal = $('#deleteModal');
       $('#deleteModalTitle').textContent = `"${doc.title || 'Untitled Document'}"`;
       modal.classList.remove('hidden');
-      
+
       $('#deleteCancel').onclick = () => {
         modal.classList.add('hidden');
       };
-      
+
       $('#deleteConfirmBtn').onclick = () => {
         modal.classList.add('hidden');
         docs = docs.filter(d => d.id !== doc.id);
@@ -298,7 +313,7 @@ function renderSidebar() {
         }
       };
     };
-    
+
     list.appendChild(li);
   });
 }
@@ -311,7 +326,7 @@ $('#copyRtfBtn').onclick = () => {
         <path style="stroke-dasharray: 50; stroke-dashoffset: 50; animation: drawCheck 0.4s ease forwards;" d="M20 6L9 17l-5-5"/>
       </svg> RTF Copied`;
     btn.classList.add('success');
-    
+
     setTimeout(() => {
       btn.innerHTML = originalHtml;
       btn.classList.remove('success');
@@ -344,18 +359,18 @@ function init() {
     document.body.setAttribute('data-theme', 'dark');
     $('#themeToggle').innerHTML = '☀️';
   }
-  
+
   // Load Welcome Modal
   if (localStorage.getItem('ashipad-hide-welcome') !== 'true') {
     welcome.classList.remove('hidden');
   }
-  
+
   // Load Documents
   try {
     const savedDocs = localStorage.getItem(STORAGE_KEY);
     if (savedDocs) docs = JSON.parse(savedDocs);
-  } catch(e) {}
-  
+  } catch (e) { }
+
   // Legacy migration
   const legacyContent = localStorage.getItem(LEGACY_KEY);
   if (legacyContent) {
@@ -367,7 +382,7 @@ function init() {
     });
     localStorage.removeItem(LEGACY_KEY);
   }
-  
+
   if (docs.length === 0) {
     docs.push({
       id: Date.now().toString(),
@@ -376,10 +391,10 @@ function init() {
       updatedAt: Date.now()
     });
   }
-  
+
   const savedCurrentId = localStorage.getItem(CURRENT_DOC_KEY);
   const targetId = docs.find(d => d.id === savedCurrentId) ? savedCurrentId : docs[0].id;
-  
+
   switchDoc(targetId);
 }
 init();

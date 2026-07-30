@@ -687,6 +687,86 @@ button {
   outline: none;
   width: 200px;
 }
-.doc-title-input:hover, .doc-title-input:focus {
-  background: var(--line);
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 16px;
+    gap: 16px;
+    height: 56px;
+  }
+  
+  .brand span:not(.brand-mark) {
+    display: none;
+  }
+  
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+  
+  .actions {
+    gap: 8px;
+  }
+  
+  .save-state {
+    display: none;
+  }
+  
+  .ribbon {
+    padding: 0 16px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .format-group {
+    flex-wrap: nowrap;
+  }
+  
+  .workspace {
+    padding: 16px;
+  }
+  
+  .editor, .source {
+    padding: 24px 16px;
+    min-height: calc(100vh - 220px);
+    font-size: 15px;
+  }
+  
+  .sidebar {
+    width: 100%;
+    max-width: 320px;
+  }
+  
+  .status {
+    padding: 8px 16px;
+  }
+  
+  .status span:nth-child(2) {
+    display: none; /* Hide middle status text on mobile */
+  }
+  
+  /* Ensure Modals don't overflow */
+  .modal {
+    width: calc(100% - 32px) !important;
+    max-width: 450px !important;
+    padding: 24px 20px !important;
+  }
+  
+  .modal ul {
+    grid-template-columns: 1fr !important; /* Stack shortcuts list */
+    gap: 8px !important;
+  }
+  
+  .modal div[style*="display: flex"] {
+    flex-direction: column;
+    gap: 8px !important;
+  }
+  
+  .modal a, .modal button {
+    width: 100%;
+  }
 }
