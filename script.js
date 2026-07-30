@@ -49,7 +49,7 @@ function toRtf(n) {
 
 const serialize = () => {
   const body = [...editor.childNodes].map(toRtf).join('');
-  return `{\\rtf1 ${body}}`;
+  return body.trim();
 };
 
 function fromRtf(r) {
