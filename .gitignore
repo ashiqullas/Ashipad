@@ -14,3 +14,6 @@ extension-src/
 build-extension.sh
 inject-base64.js
 assets/ext-base64.txt
+
+# Antigravity Agent Configuration
+.agents/
