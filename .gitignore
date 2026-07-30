@@ -5,3 +5,7 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Extension Build Artifacts
+extension-build/
+assets/ashipad-extension.zip
