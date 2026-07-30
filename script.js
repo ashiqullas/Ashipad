@@ -68,7 +68,7 @@ function toRtf(n) {
 
 const serialize = () => {
   const body = [...editor.childNodes].map(toRtf).join('');
-  return body.trim();
+  return `{\\rtf1\\ansi\\ansicpg1252\\deff0 \n${body.trim()}\n}`;
 };
 
 function fromRtf(r) {
@@ -347,10 +347,38 @@ $('#aboutClose').onclick = $('#aboutDone').onclick = () => {
 };
 
 const welcome = $('#welcome');
-$('#welcomeDone').onclick = () => {
+
+function startTour() {
+  if (!window.driver) return;
+  const driverObj = window.driver.js.driver({
+    showProgress: true,
+    animate: true,
+    steps: [
+      { element: '#docTitle', popover: { title: 'Name your document', description: 'Give your document a memorable name here.', side: "bottom", align: 'start' }},
+      { element: '.ribbon', popover: { title: 'Format text', description: 'Use the ribbon to bold, italicize, underline, or strike-through text. Standard keyboard shortcuts also work.', side: "bottom", align: 'start' }},
+      { element: '.tabs', popover: { title: 'Switch views', description: 'Toggle between the visual editor and the raw RTF source code.', side: "bottom", align: 'start' }},
+      { element: '#menuToggle', popover: { title: 'Manage documents', description: 'Access your saved documents or create new ones from the sidebar.', side: "bottom", align: 'start' }},
+      { element: '#themeToggle', popover: { title: 'Themes', description: 'Toggle between the beautifully crafted light and dark modes.', side: "bottom", align: 'start' }}
+    ]
+  });
+  driverObj.drive();
+}
+
+const handleWelcomeClose = (shouldStartTour) => {
   if ($('#hideWelcome').checked) localStorage.setItem('ashipad-hide-welcome', 'true');
   welcome.classList.add('hidden');
+  
+  // Mark tour as done to avoid automatic popup on next reload 
+  // if they hid the welcome modal but didn't explicitly take the tour
+  localStorage.setItem('ashipad-tour-completed', 'true');
+
+  if (shouldStartTour) {
+    startTour();
+  }
 };
+
+$('#skipTourBtn').onclick = () => handleWelcomeClose(false);
+$('#startTourBtn').onclick = () => handleWelcomeClose(true);
 
 // Initialization
 function init() {
@@ -363,6 +391,12 @@ function init() {
   // Load Welcome Modal
   if (localStorage.getItem('ashipad-hide-welcome') !== 'true') {
     welcome.classList.remove('hidden');
+  } else if (localStorage.getItem('ashipad-tour-completed') !== 'true') {
+    // Small delay to ensure the UI is fully rendered before tour starts
+    setTimeout(() => {
+      startTour();
+      localStorage.setItem('ashipad-tour-completed', 'true');
+    }, 100);
   }
 
   // Load Documents

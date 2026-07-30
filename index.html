@@ -9,6 +9,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icon.svg">
+  <link rel="stylesheet" href="vendor/driver.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -138,11 +139,13 @@
       </label>
       
       <div class="modal-actions">
-        <button class="primary" id="welcomeDone">Start Writing</button>
+        <button class="primary" id="skipTourBtn" style="background: var(--line); color: var(--ink);">Skip</button>
+        <button class="primary" id="startTourBtn">Start Tour</button>
       </div>
     </section>
   </div>
 
+  <script src="vendor/driver.js"></script>
   <script src="script.js"></script>
   <script>
     if ('serviceWorker' in navigator) {

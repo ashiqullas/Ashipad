@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "AshiPad",
+  "version": "2.0.0",
+  "description": "Premium Rich Text Editor Extension",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "128": "assets/icon.svg"
+    }
+  },
+  "icons": {
+    "128": "assets/icon.svg"
+  },
+  "permissions": [
+    "storage"
+  ]
+}
