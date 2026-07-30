@@ -1,32 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Disclaimer — AshiPad</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    :root{--ink:#252629;--muted:#7e8188;--line:#e6e6e4;--paper:#fffefd;--accent:#e45736;--nav:#242526;--ui:"Segoe UI",Arial,sans-serif;--doc:Georgia,"Times New Roman",serif}*{box-sizing:border-box}body{margin:0;background:#ebeae6;color:var(--ink);font:14px var(--ui)}.app{min-height:100vh;display:flex;flex-direction:column}.topbar{height:64px;display:flex;align-items:center;gap:34px;background:var(--nav);color:#fff;padding:0 28px}.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:20px;letter-spacing:-.8px}.brand-mark{width:27px;height:27px;display:grid;place-items:center;border-radius:7px;background:var(--accent);font:18px var(--doc)}.content{flex:1;display:flex;justify-content:center;padding:40px 20px}.modal{width:min(700px,100%);background:var(--paper);border-radius:10px;box-shadow:0 2px 10px #0000000a,0 0 0 1px #dddcd8;padding:40px 48px}.modal h1{font-size:28px;margin:0 0 8px}.modal h2{font-size:20px;margin:28px 0 10px;color:var(--ink)}.modal p,.modal li{color:#65676b;font-size:14px;line-height:1.8}.modal ul{padding-left:18px}.modal a{color:var(--accent);text-decoration:none}.modal a:hover{text-decoration:underline}.back{display:inline-block;margin-bottom:20px;color:var(--accent);font-weight:600;text-decoration:none;font-size:13px}.back:hover{text-decoration:underline}.status{height:30px;display:flex;align-items:center;gap:28px;padding:0 28px;background:#fff;border-top:1px solid var(--line);color:#85878c;font-size:10px}.status span:last-child{margin-left:auto}@media(max-width:700px){.topbar{padding:0 16px}.modal{padding:24px 20px}.content{padding:20px 12px}}
+    .static-page { padding: 40px 5vw; max-width: 800px; margin: 0 auto; }
+    .back { display: inline-block; margin-bottom: 24px; color: var(--accent); font-weight: 600; text-decoration: none; font-family: var(--ui); }
+    .back:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="app">
-    <header class="topbar"><div class="brand"><span class="brand-mark">A</span>AshiPad</div></header>
-    <main class="content">
-      <div class="modal">
-        <a href="index.html" class="back">← Back to AshiPad</a>
-        <h1>Disclaimer</h1>
-        <p>AshiPad is a simple rich-text editor with minimal RTF output. It is provided "as is" for personal and educational use.</p>
-        <h2>No Warranty</h2>
-        <p>The software is provided without any warranty of any kind, either express or implied. The author does not guarantee the accuracy, completeness, or reliability of the content generated or processed by AshiPad.</p>
-        <h2>Limitation of Liability</h2>
-        <p>In no event shall the author be liable for any damages arising from the use of this software, including but not limited to data loss, corruption, or unintended modifications to your documents.</p>
-        <h2>Third-Party Content</h2>
-        <p>AshiPad does not store, transmit, or share your content with any third party. All editing and exporting happens locally in your browser.</p>
-        <h2>Usage Responsibility</h2>
-        <p>Users are solely responsible for the content they create and export using AshiPad. The author assumes no liability for how users choose to use the exported content.</p>
-        <p style="margin-top:30px;color:#a0a19f;font-size:12px;">Coded by Ashiq Ullas</p>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">A</span>
+        <span>AshiPad</span>
       </div>
+    </header>
+    <main class="workspace" style="display: block; overflow: auto; flex: 1;">
+      <section class="static-page">
+        <a href="index.html" class="back">← Back to AshiPad</a>
+        <article class="page" style="width: 100%; min-height: auto;">
+          <h1>Disclaimer</h1>
+          <p>AshiPad is a simple rich-text editor with minimal RTF output. It is provided "as is" for personal and educational use.</p>
+          <h2>No Warranty</h2>
+          <p>The software is provided without any warranty of any kind, either express or implied. The author does not guarantee the accuracy, completeness, or reliability of the content generated or processed by AshiPad.</p>
+          <h2>Limitation of Liability</h2>
+          <p>In no event shall the author be liable for any damages arising from the use of this software, including but not limited to data loss, corruption, or unintended modifications to your documents.</p>
+          <h2>Third-Party Content</h2>
+          <p>AshiPad does not store, transmit, or share your content with any third party. All editing happens locally in your browser.</p>
+          <h2>Usage Responsibility</h2>
+          <p>Users are solely responsible for the content they create. The author assumes no liability for how users choose to use the content.</p>
+          <p style="margin-top:30px;color:var(--muted);font-size:12px;font-family:var(--ui);">Coded by Ashiq Ullas</p>
+        </article>
+      </section>
     </main>
-    <footer class="status"><span>AshiPad — Rich Text Editor</span></footer>
+    <footer class="status">
+      <span>AshiPad — Rich Text Editor</span>
+    </footer>
   </div>
 </body>
 </html>
