@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Disclaimer — AshiPad</title>
   <link rel="stylesheet" href="style.css">
+  <script>
+    if (localStorage.getItem('ashipad-theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  </script>
   <style>
-    .static-page { padding: 40px 5vw; max-width: 800px; margin: 0 auto; }
-    .back { display: inline-block; margin-bottom: 24px; color: var(--accent); font-weight: 600; text-decoration: none; font-family: var(--ui); }
-    .back:hover { text-decoration: underline; }
+    .static-page { padding: 40px 5vw 100px; max-width: 800px; margin: 0 auto; }
+    .back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 24px; color: var(--muted); font-weight: 600; text-decoration: none; font-family: var(--ui); transition: color 0.2s ease; }
+    .back:hover { color: var(--ink); }
   </style>
 </head>
 <body>
@@ -24,7 +27,7 @@
         <a href="index.html" class="back">← Back to AshiPad</a>
         <article class="page" style="width: 100%; min-height: auto;">
           <h1>Disclaimer</h1>
-          <p>AshiPad is a simple rich-text editor with minimal RTF output. It is provided "as is" for personal and educational use.</p>
+          <p>AshiPad is a premium rich-text editor with minimal RTF output. It is provided "as is" for personal and educational use.</p>
           <h2>No Warranty</h2>
           <p>The software is provided without any warranty of any kind, either express or implied. The author does not guarantee the accuracy, completeness, or reliability of the content generated or processed by AshiPad.</p>
           <h2>Limitation of Liability</h2>
@@ -38,8 +41,11 @@
       </section>
     </main>
     <footer class="status">
-      <span>AshiPad — Rich Text Editor</span>
+      <span>AshiPad — Premium Rich Text Editor</span>
     </footer>
   </div>
+  <script>
+    if (localStorage.getItem('ashipad-theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+  </script>
 </body>
 </html>

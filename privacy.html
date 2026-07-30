@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy Policy — AshiPad</title>
   <link rel="stylesheet" href="style.css">
+  <script>
+    if (localStorage.getItem('ashipad-theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  </script>
   <style>
-    .static-page { padding: 40px 5vw; max-width: 800px; margin: 0 auto; }
-    .back { display: inline-block; margin-bottom: 24px; color: var(--accent); font-weight: 600; text-decoration: none; font-family: var(--ui); }
-    .back:hover { text-decoration: underline; }
+    .static-page { padding: 40px 5vw 100px; max-width: 800px; margin: 0 auto; }
+    .back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 24px; color: var(--muted); font-weight: 600; text-decoration: none; font-family: var(--ui); transition: color 0.2s ease; }
+    .back:hover { color: var(--ink); }
   </style>
 </head>
 <body>
@@ -42,8 +45,11 @@
       </section>
     </main>
     <footer class="status">
-      <span>AshiPad — Rich Text Editor</span>
+      <span>AshiPad — Premium Rich Text Editor</span>
     </footer>
   </div>
+  <script>
+    if (localStorage.getItem('ashipad-theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+  </script>
 </body>
 </html>
