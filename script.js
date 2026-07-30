@@ -118,13 +118,19 @@ function toggleView(v) {
   if (v === 'write') {
     editor.classList.remove('hidden');
     source.classList.add('hidden');
-    editor.style.opacity = '0';
-    requestAnimationFrame(() => editor.style.opacity = '1');
+    $('#copyRtfBtn').classList.add('hidden');
+    // Restart CSS animation
+    editor.style.animation = 'none';
+    editor.offsetHeight; // reflow
+    editor.style.animation = null;
   } else {
     source.classList.remove('hidden');
     editor.classList.add('hidden');
-    source.style.opacity = '0';
-    requestAnimationFrame(() => source.style.opacity = '1');
+    $('#copyRtfBtn').classList.remove('hidden');
+    // Restart CSS animation
+    source.style.animation = 'none';
+    source.offsetHeight; // reflow
+    source.style.animation = null;
   }
   
   if (v === 'rtf') source.value = serialize();
@@ -156,9 +162,19 @@ $$('[data-cmd]').forEach(b => {
 
 $$('.tab').forEach(b => b.onclick = () => toggleView(b.dataset.view));
 
+function checkEmpty() {
+  const html = editor.innerHTML.trim();
+  if (!html || html === '<p><br></p>' || html === '<br>') {
+    editor.classList.add('is-empty');
+  } else {
+    editor.classList.remove('is-empty');
+  }
+}
+
 editor.oninput = () => {
   source.value = serialize();
   updateCounts();
+  checkEmpty();
   markChanged();
 };
 
@@ -173,9 +189,26 @@ $('#newBtn').onclick = () => {
   editor.innerHTML = '<p><br></p>';
   source.value = '';
   updateCounts();
+  checkEmpty();
   toggleView('write');
   saveLocal();
   status.textContent = 'New document';
+};
+
+$('#copyRtfBtn').onclick = () => {
+  navigator.clipboard.writeText(source.value).then(() => {
+    const btn = $('#copyRtfBtn');
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path style="stroke-dasharray: 50; stroke-dashoffset: 50; animation: drawCheck 0.4s ease forwards;" d="M20 6L9 17l-5-5"/>
+      </svg> RTF Copied`;
+    btn.classList.add('success');
+    
+    setTimeout(() => {
+      btn.innerHTML = originalHtml;
+      btn.classList.remove('success');
+    }, 2500);
+  });
 };
 
 $('#themeToggle').onclick = toggleTheme;
@@ -216,6 +249,7 @@ function init() {
   }
   
   updateCounts();
+  checkEmpty();
   source.value = serialize();
 }
 init();

@@ -5,11 +5,11 @@
   --muted: #64748b;
   --line: #e2e8f0;
   --paper: #ffffff;
-  --bg: #f1f5f9;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --nav: #ffffff;
-  --nav-border: #e2e8f0;
+  --bg: #f8fafc;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --nav: rgba(255, 255, 255, 0.75);
+  --nav-border: rgba(226, 232, 240, 0.8);
   --ui: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --doc: 'Lora', Georgia, "Times New Roman", serif;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -21,19 +21,19 @@
 
 [data-theme="dark"] {
   --ink: #f8fafc;
-  --muted: #94a3b8;
-  --line: #334155;
-  --paper: #1e293b;
-  --bg: #0f172a;
-  --accent: #3b82f6;
-  --accent-hover: #60a5fa;
-  --nav: #1e293b;
-  --nav-border: #334155;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.5);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
-  --modal-bg: rgba(30, 41, 59, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.05);
+  --muted: #a1a1aa;
+  --line: #27272a;
+  --paper: #151515;
+  --bg: #000000;
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+  --nav: rgba(0, 0, 0, 0.75);
+  --nav-border: rgba(39, 39, 42, 0.8);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.8);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.8), 0 2px 4px -2px rgb(0 0 0 / 0.8);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.8), 0 4px 6px -4px rgb(0 0 0 / 0.8);
+  --modal-bg: rgba(21, 21, 21, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.08);
 }
 
 * {
@@ -56,16 +56,20 @@ body {
 
 /* Header & Topbar */
 .topbar {
+  position: sticky;
+  top: 0;
   height: 64px;
   display: flex;
   align-items: center;
   gap: 34px;
   background: var(--nav);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: var(--ink);
   padding: 0 28px;
   border-bottom: 1px solid var(--nav-border);
   box-shadow: var(--shadow-sm);
-  z-index: 10;
+  z-index: 20;
 }
 
 .brand {
@@ -118,12 +122,13 @@ button {
   width: 36px;
   height: 36px;
   border-radius: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .icon-btn:hover {
   background: var(--line);
   color: var(--ink);
+  transform: scale(1.1);
 }
 
 .primary {
@@ -134,8 +139,8 @@ button {
   padding: 10px 16px;
   font-weight: 600;
   font-size: 13px;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -143,22 +148,41 @@ button {
 
 .primary:hover {
   background: var(--accent-hover);
-  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
-  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  transform: translateY(-2px);
 }
 
 .primary:active {
   transform: translateY(0);
 }
 
+@keyframes popSuccess {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); background-color: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
+  100% { transform: scale(1); background-color: #10b981; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3); }
+}
+
+@keyframes drawCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+.primary.success {
+  animation: popSuccess 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
 /* Tabs */
 .tabs {
+  position: sticky;
+  top: 64px;
   height: 48px;
   display: flex;
   align-items: stretch;
   padding-left: 28px;
   background: var(--nav);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--line);
+  z-index: 15;
 }
 
 .tab {
@@ -169,7 +193,7 @@ button {
   color: var(--muted);
   font-weight: 600;
   font-size: 14px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .tab:hover {
@@ -188,17 +212,28 @@ button {
   bottom: -1px;
   height: 2px;
   background: var(--accent);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: scaleX(0.5); }
+  to { opacity: 1; transform: scaleX(1); }
 }
 
 /* Ribbon */
 .ribbon {
+  position: sticky;
+  top: 112px;
   height: 60px;
   padding: 10px 28px;
   display: flex;
   align-items: center;
   background: var(--nav);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--line);
   gap: 16px;
+  z-index: 10;
 }
 
 .format-group {
@@ -220,13 +255,14 @@ button {
   background: transparent;
   color: var(--ink);
   font-size: 16px;
-  transition: all 0.15s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: grid;
   place-items: center;
 }
 
 .format-group button:hover {
   background: var(--line);
+  transform: scale(1.1);
 }
 
 .format-group button:active {
@@ -270,8 +306,7 @@ button {
 
 .canvas {
   flex: 1;
-  overflow: auto;
-  padding: 40px 5vw 60px;
+  padding: 40px 5vw 100px; /* Extra padding for sticky footer */
 }
 
 .meta {
@@ -286,6 +321,11 @@ button {
   text-transform: uppercase;
 }
 
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .page, .source {
   display: block;
   width: min(800px, 100%);
@@ -293,6 +333,7 @@ button {
   margin: auto;
   outline: 0;
   transition: opacity 0.3s ease;
+  animation: fadeSlideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .page.hidden, .source.hidden {
@@ -302,6 +343,7 @@ button {
 }
 
 .page {
+  position: relative;
   padding: 80px 96px;
   background: var(--paper);
   box-shadow: var(--shadow-lg);
@@ -309,11 +351,28 @@ button {
   border: 1px solid var(--line);
   font: 17px/1.8 var(--doc);
   color: var(--ink);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.page:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), var(--shadow-lg);
+}
+
+.page.is-empty::before {
+  content: "Start writing your masterpiece...";
+  position: absolute;
+  top: 80px;
+  left: 96px;
+  color: var(--muted);
+  font-style: italic;
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 .page p { margin: 0 0 1.2em; }
-.page h1 { font-size: 2.2em; margin-bottom: 0.5em; font-family: var(--ui); letter-spacing: -0.02em; }
-.page h2 { font-size: 1.8em; margin-bottom: 0.5em; font-family: var(--ui); letter-spacing: -0.01em; }
+.page h1 { font-size: 2.2em; margin-bottom: 0.5em; font-family: var(--ui); letter-spacing: -0.03em; font-weight: 800; }
+.page h2 { font-size: 1.8em; margin-bottom: 0.5em; font-family: var(--ui); letter-spacing: -0.02em; font-weight: 700; }
 .page ul, .page ol { margin-bottom: 1.2em; }
 .page li { margin-bottom: 0.4em; }
 
@@ -332,18 +391,25 @@ button {
 
 /* Status Bar */
 .status {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 36px;
   display: flex;
   align-items: center;
   gap: 28px;
   padding: 0 28px;
   background: var(--nav);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  z-index: 30;
 }
 
 .status span:last-child {
