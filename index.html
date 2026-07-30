@@ -87,28 +87,28 @@
 
   <!-- About Modal -->
   <div class="backdrop hidden" id="about">
-    <section class="modal" style="width: 500px; text-align: center; position: relative; padding: 32px 24px;">
-      <button class="close" id="aboutClose" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; transition: color 0.2s; line-height: 1;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">×</button>
-      <div class="modal-mark" style="font-size: 32px; margin: 0 auto 16px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: var(--accent); color: white; border-radius: 12px; font-weight: bold;">A</div>
-      <h2 style="margin: 0 0 12px 0; font-size: 20px;">AshiPad</h2>
-      <p style="color: var(--muted); margin: 0 0 28px 0; line-height: 1.6; font-size: 14px;">A premium, lightweight rich-text editor built for focus and speed. Generates minimal, raw RTF output and saves your work locally.</p>
+    <section class="modal about-modal">
+      <button class="close about-close" id="aboutClose">×</button>
+      <div class="modal-mark">A</div>
+      <h2>AshiPad</h2>
+      <p class="about-desc">A premium, lightweight rich-text editor built for focus and speed. Generates minimal, raw RTF output and saves your work locally.</p>
       
-      <div style="background: var(--bg); padding: 16px 20px; border-radius: var(--radius); text-align: left; margin-bottom: 28px; border: 1px solid var(--line);">
-        <h3 style="margin: 0 0 16px 0; font-size: 13px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px;">Keyboard Shortcuts</h3>
-        <ul style="margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-          <li style="display: flex; align-items: center; gap: 8px;"><kbd style="background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 12px; color: var(--muted);">Ctrl+B</kbd> Bold</li>
-          <li style="display: flex; align-items: center; gap: 8px;"><kbd style="background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 12px; color: var(--muted);">Ctrl+I</kbd> Italic</li>
-          <li style="display: flex; align-items: center; gap: 8px;"><kbd style="background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 12px; color: var(--muted);">Ctrl+U</kbd> Underline</li>
-          <li style="display: flex; align-items: center; gap: 8px;"><kbd style="background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 12px; color: var(--muted);">Ctrl+Z</kbd> Undo</li>
+      <div class="shortcuts-box">
+        <h3>Keyboard Shortcuts</h3>
+        <ul class="shortcuts-grid">
+          <li><kbd>Ctrl+B</kbd> Bold</li>
+          <li><kbd>Ctrl+I</kbd> Italic</li>
+          <li><kbd>Ctrl+U</kbd> Underline</li>
+          <li><kbd>Ctrl+Z</kbd> Undo</li>
         </ul>
       </div>
       
-      <p style="font-size: 12px; color: var(--muted); margin: 0 0 28px 0;">Coded by Ashiq Ullas. Upgraded with modern aesthetics.</p>
+      <p class="about-credits">Coded by Ashiq Ullas. Upgraded with modern aesthetics.</p>
       
-      <div style="display: flex; gap: 12px; justify-content: center;">
-        <a href="disclaimer.html" style="text-decoration:none; background:var(--surface); border: 1px solid var(--line); color:var(--ink); font-size: 13px; padding: 10px 16px; flex: 1; text-align: center; border-radius: var(--radius); transition: all 0.2s;" onmouseover="this.style.background='var(--surface-hover)'" onmouseout="this.style.background='var(--surface)'">Disclaimer</a>
-        <a href="privacy.html" style="text-decoration:none; background:var(--surface); border: 1px solid var(--line); color:var(--ink); font-size: 13px; padding: 10px 16px; flex: 1; text-align: center; border-radius: var(--radius); transition: all 0.2s;" onmouseover="this.style.background='var(--surface-hover)'" onmouseout="this.style.background='var(--surface)'">Privacy Policy</a>
-        <button class="primary" id="aboutDone" style="flex:1.5; padding: 10px 16px; font-size: 14px; font-weight: 500;">Done</button>
+      <div class="about-actions">
+        <a href="disclaimer.html" class="btn-secondary">Disclaimer</a>
+        <a href="privacy.html" class="btn-secondary">Privacy Policy</a>
+        <button class="primary" id="aboutDone">Done</button>
       </div>
     </section>
   </div>
