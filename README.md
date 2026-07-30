@@ -1,7 +1,5 @@
 # AshiPad
 
-![AshiPad Demo Video](assets/demo.webp)
-
 A premium, lightweight rich-text editor built for focus and speed. AshiPad generates minimal, raw RTF output and saves your work locally in your browser.
 
 ## Features
